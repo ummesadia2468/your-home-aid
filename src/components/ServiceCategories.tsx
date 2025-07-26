@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 import { 
   Sparkles, 
   Paintbrush, 
@@ -14,34 +15,40 @@ import {
 } from "lucide-react";
 
 const ServiceCategories = () => {
+  const navigate = useNavigate();
+  
   const categories = [
     {
       id: 1,
       name: "Cleaning Services",
       icon: Sparkles,
       description: "House, office & deep cleaning",
-      services: "50+ services"
+      services: "50+ services",
+      slug: "cleaning"
     },
     {
       id: 2,
       name: "House Painting",
       icon: Paintbrush,
       description: "Interior & exterior painting",
-      services: "25+ services"
+      services: "25+ services",
+      slug: "painting"
     },
     {
       id: 3,
       name: "Electrician",
       icon: Zap,
       description: "Electrical repairs & installation",
-      services: "30+ services"
+      services: "30+ services",
+      slug: "electrician"
     },
     {
       id: 4,
       name: "Home Appliance Repair",
       icon: Wrench,
       description: "AC, fridge, washing machine",
-      services: "40+ services"
+      services: "40+ services",
+      slug: "appliance"
     },
     {
       id: 5,
@@ -122,6 +129,7 @@ const ServiceCategories = () => {
                     variant="outline" 
                     size="sm" 
                     className="w-full group-hover:bg-primary group-hover:text-white transition-colors duration-300"
+                    onClick={() => navigate(`/services/${category.slug}`)}
                   >
                     View Services
                   </Button>

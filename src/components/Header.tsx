@@ -8,8 +8,8 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
-    { name: "Services", href: "/services" },
-    { name: "Become Provider", href: "/provider-register" },
+    { name: "Services", href: "/services/cleaning" },
+    { name: "Become Provider", href: "/provider" },
     { name: "About", href: "/about" },
     { name: "Contact", href: "/contact" },
   ];
@@ -96,13 +96,13 @@ const Header = () => {
               </Link>
             </Button>
             <Button variant="outline" size="sm" asChild>
-              <Link to="/login">
+              <Link to="/auth">
                 <User className="h-4 w-4 mr-2" />
                 Login
               </Link>
             </Button>
             <Button size="sm" asChild>
-              <Link to="/register">Sign Up</Link>
+              <Link to="/auth">Sign Up</Link>
             </Button>
           </nav>
         </div>

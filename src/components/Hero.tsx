@@ -1,9 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Search, MapPin } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { useNavigate } from "react-router-dom";
 import heroImage from "@/assets/hero-services.jpg";
+import AreaFilter from "./AreaFilter";
 
 const Hero = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="relative overflow-hidden bg-gradient-hero py-20 lg:py-32">
       <div className="container px-4 md:px-6">
@@ -20,15 +24,9 @@ const Hero = () => {
               </p>
             </div>
             
-            <div className="w-full max-w-sm space-y-2">
+            <div className="w-full max-w-lg space-y-2">
               <div className="flex space-x-2">
-                <div className="relative flex-1">
-                  <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Enter your location"
-                    className="pl-10 bg-white/95 border-0 shadow-soft"
-                  />
-                </div>
+                <AreaFilter />
                 <Button className="bg-secondary hover:bg-secondary/90 text-white shadow-soft">
                   <Search className="h-4 w-4" />
                 </Button>
@@ -39,10 +37,19 @@ const Hero = () => {
             </div>
 
             <div className="flex flex-col gap-2 min-[400px]:flex-row">
-              <Button size="lg" className="bg-white text-primary hover:bg-white/90 shadow-hover">
+              <Button 
+                size="lg" 
+                className="bg-white text-primary hover:bg-white/90 shadow-hover"
+                onClick={() => navigate('/bookings')}
+              >
                 Book Service Now
               </Button>
-              <Button size="lg" variant="outline" className="bg-white/10 text-white border-white/20 hover:bg-white/20">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="bg-white/10 text-white border-white/20 hover:bg-white/20"
+                onClick={() => navigate('/provider')}
+              >
                 Become a Provider
               </Button>
             </div>

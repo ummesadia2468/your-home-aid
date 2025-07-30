@@ -1,4 +1,5 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,6 +10,9 @@ import PaymentMethods from "@/components/PaymentMethods";
 
 const ServiceCategory = () => {
   const { category } = useParams();
+  const navigate = useNavigate();
+  const [selectedArea, setSelectedArea] = useState("");
+  const [priceFilter, setPriceFilter] = useState("");
 
   // Sample services data with Pakistani prices
   const servicesData: Record<string, any[]> = {
@@ -139,6 +143,16 @@ const ServiceCategory = () => {
   const services = servicesData[category || "cleaning"] || [];
   const categoryName = categoryMap[category || "cleaning"] || "Services";
 
+  // Filter services based on selected filters
+  const filteredServices = services.filter(service => {
+    if (selectedArea && !service.area?.includes(selectedArea)) return false;
+    return true;
+  });
+
+  const handleBookService = (serviceId: number) => {
+    navigate(`/services/${category}/${serviceId}`);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -150,7 +164,7 @@ const ServiceCategory = () => {
 
         {/* Filters */}
         <div className="mb-6 flex flex-wrap gap-4 items-center">
-          <AreaFilter />
+          <AreaFilter onAreaChange={setSelectedArea} />
           <div className="flex gap-2">
             <Badge variant="outline">Price: Low to High</Badge>
             <Badge variant="outline">Highest Rated</Badge>
@@ -162,7 +176,7 @@ const ServiceCategory = () => {
           {/* Services Grid */}
           <div className="lg:col-span-3">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {services.map((service) => (
+              {filteredServices.map((service) => (
                 <Card key={service.id} className="group hover:shadow-hover transition-shadow cursor-pointer">
                   <div className="aspect-video bg-muted rounded-t-lg"></div>
                   <CardContent className="p-6">
@@ -199,7 +213,7 @@ const ServiceCategory = () => {
                             </span>
                           )}
                         </div>
-                        <Button size="sm">Book Now</Button>
+                        <Button size="sm" onClick={() => handleBookService(service.id)}>Book Now</Button>
                       </div>
                     </div>
                   </CardContent>

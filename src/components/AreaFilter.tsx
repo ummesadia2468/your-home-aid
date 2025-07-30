@@ -1,7 +1,11 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MapPin } from "lucide-react";
 
-const AreaFilter = () => {
+interface AreaFilterProps {
+  onAreaChange?: (area: string) => void;
+}
+
+const AreaFilter = ({ onAreaChange }: AreaFilterProps) => {
   const karachiAreas = [
     "All Areas",
     "Saddar Town",
@@ -32,7 +36,7 @@ const AreaFilter = () => {
   return (
     <div className="flex items-center space-x-2">
       <MapPin className="h-4 w-4 text-muted-foreground" />
-      <Select defaultValue="All Areas">
+      <Select defaultValue="All Areas" onValueChange={(value) => onAreaChange?.(value === "All Areas" ? "" : value)}>
         <SelectTrigger className="w-[200px] bg-white/95 border-0 shadow-soft">
           <SelectValue placeholder="Select area" />
         </SelectTrigger>

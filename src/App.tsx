@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound";
 import BookingDashboard from "./pages/BookingDashboard";
 import ProviderDashboard from "./pages/ProviderDashboard";
 import ServiceCategory from "./pages/ServiceCategory";
+import ServiceBooking from "./pages/ServiceBooking";
 import Auth from "./pages/Auth";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/bookings" element={<BookingDashboard />} />
           <Route path="/provider" element={<ProviderDashboard />} />
           <Route path="/services/:category" element={<ServiceCategory />} />
+          <Route path="/services/:category/:serviceId" element={<ServiceBooking />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

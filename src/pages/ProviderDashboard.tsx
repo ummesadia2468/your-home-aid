@@ -196,17 +196,6 @@ const ProviderDashboard = () => {
                 <Plus className="h-5 w-5" />
                 Add New Service
               </CardTitle>
-              
-              {/* Search Bar */}
-              <div className="flex items-center gap-2 mt-4">
-                <Search className="h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search your services..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="flex-1"
-                />
-              </div>
             </CardHeader>
             <CardContent className="space-y-4">
               <Input

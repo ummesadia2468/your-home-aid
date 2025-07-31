@@ -21,6 +21,12 @@ const ServiceBooking = () => {
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [selectedTime, setSelectedTime] = useState("");
   const [selectedPayment, setSelectedPayment] = useState("");
+  const [bankDetails, setBankDetails] = useState({
+    accountHolder: "",
+    bankName: "",
+    accountNumber: "",
+    transactionId: ""
+  });
   const [customerDetails, setCustomerDetails] = useState({
     name: "",
     phone: "",
@@ -68,10 +74,19 @@ const ServiceBooking = () => {
       return;
     }
 
+    if (selectedPayment === "bank" && (!bankDetails.accountHolder || !bankDetails.bankName || !bankDetails.accountNumber)) {
+      toast({
+        title: "Missing Bank Information",
+        description: "Please fill all bank details to proceed.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     // Show success popup
     toast({
-      title: "Order Confirmed Successfully! 🎉",
-      description: `Your service is booked for ${format(selectedDate, 'PPP')} at ${selectedTime}`,
+      title: "Submit Successfully - Service Confirmed! 🎉",
+      description: `Your payment has been processed and service is booked for ${format(selectedDate, 'PPP')} at ${selectedTime}`,
     });
 
     setTimeout(() => {
@@ -277,16 +292,66 @@ const ServiceBooking = () => {
                 <CardHeader>
                   <CardTitle>Bank Transfer Details</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="p-3 bg-muted rounded-lg">
-                    <h4 className="font-semibold text-sm">HBL Bank</h4>
-                    <p className="text-sm text-muted-foreground">Account: 1234567890</p>
-                    <p className="text-sm text-muted-foreground">IBAN: PK12HABB1234567890</p>
+                <CardContent className="space-y-4">
+                  <div className="space-y-3 mb-4">
+                    <div className="p-3 bg-muted rounded-lg">
+                      <h4 className="font-semibold text-sm">HBL Bank</h4>
+                      <p className="text-sm text-muted-foreground">Account: 1234567890</p>
+                      <p className="text-sm text-muted-foreground">IBAN: PK12HABB1234567890</p>
+                    </div>
+                    <div className="p-3 bg-muted rounded-lg">
+                      <h4 className="font-semibold text-sm">UBL Bank</h4>
+                      <p className="text-sm text-muted-foreground">Account: 0987654321</p>
+                      <p className="text-sm text-muted-foreground">IBAN: PK34UBL0987654321</p>
+                    </div>
                   </div>
-                  <div className="p-3 bg-muted rounded-lg">
-                    <h4 className="font-semibold text-sm">UBL Bank</h4>
-                    <p className="text-sm text-muted-foreground">Account: 0987654321</p>
-                    <p className="text-sm text-muted-foreground">IBAN: PK34UBL0987654321</p>
+                  
+                  <div className="border-t pt-4">
+                    <h4 className="font-semibold mb-3">Enter Your Bank Details</h4>
+                    <div className="space-y-3">
+                      <div>
+                        <Label htmlFor="accountHolder">Account Holder Name *</Label>
+                        <Input
+                          id="accountHolder"
+                          value={bankDetails.accountHolder}
+                          onChange={(e) => setBankDetails({...bankDetails, accountHolder: e.target.value})}
+                          placeholder="Enter account holder name"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="bankName">Bank Name *</Label>
+                        <Select value={bankDetails.bankName} onValueChange={(value) => setBankDetails({...bankDetails, bankName: value})}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select your bank" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="HBL">HBL Bank</SelectItem>
+                            <SelectItem value="UBL">UBL Bank</SelectItem>
+                            <SelectItem value="MCB">MCB Bank</SelectItem>
+                            <SelectItem value="Allied">Allied Bank</SelectItem>
+                            <SelectItem value="NBP">National Bank</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label htmlFor="accountNumber">Account Number *</Label>
+                        <Input
+                          id="accountNumber"
+                          value={bankDetails.accountNumber}
+                          onChange={(e) => setBankDetails({...bankDetails, accountNumber: e.target.value})}
+                          placeholder="Enter your account number"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="transactionId">Transaction ID (Optional)</Label>
+                        <Input
+                          id="transactionId"
+                          value={bankDetails.transactionId}
+                          onChange={(e) => setBankDetails({...bankDetails, transactionId: e.target.value})}
+                          placeholder="Enter transaction reference"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>

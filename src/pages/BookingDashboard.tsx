@@ -5,9 +5,11 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calendar, Clock, MapPin, Star, Phone } from "lucide-react";
 import Header from "@/components/Header";
+import { useToast } from "@/hooks/use-toast";
 
 const BookingDashboard = () => {
-  const [bookings] = useState([
+  const { toast } = useToast();
+  const [bookings, setBookings] = useState([
     {
       id: 1,
       service: "House Cleaning",
@@ -51,6 +53,57 @@ const BookingDashboard = () => {
       case "Cancelled": return "bg-red-500";
       default: return "bg-gray-500";
     }
+  };
+
+  const handleConfirmBooking = (bookingId: number) => {
+    setBookings(prev => prev.map(booking => 
+      booking.id === bookingId 
+        ? { ...booking, status: "Confirmed" }
+        : booking
+    ));
+    toast({
+      title: "Booking Confirmed!",
+      description: "Your booking has been confirmed successfully.",
+    });
+  };
+
+  const handleCancelBooking = (bookingId: number) => {
+    setBookings(prev => prev.map(booking => 
+      booking.id === bookingId 
+        ? { ...booking, status: "Cancelled" }
+        : booking
+    ));
+    toast({
+      title: "Booking Cancelled",
+      description: "Your booking has been cancelled.",
+      variant: "destructive"
+    });
+  };
+
+  const handleCompleteBooking = (bookingId: number) => {
+    setBookings(prev => prev.map(booking => 
+      booking.id === bookingId 
+        ? { ...booking, status: "Completed" }
+        : booking
+    ));
+    toast({
+      title: "Service Completed!",
+      description: "Please rate your experience.",
+    });
+  };
+
+  const handleContactProvider = () => {
+    toast({
+      title: "Contact Provider",
+      description: "Connecting you with the service provider...",
+    });
+  };
+
+  const handleRateService = () => {
+    toast({
+      title: "Rate Service",
+      description: "Thank you for your feedback!",
+    });
   };
 
   return (
@@ -109,15 +162,27 @@ const BookingDashboard = () => {
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" onClick={handleContactProvider}>
                         <Phone className="h-4 w-4 mr-1" />
                         Contact
                       </Button>
-                      {booking.status === "Completed" && (
-                        <Button size="sm">Rate Service</Button>
+                      {booking.status === "Pending" && (
+                        <Button size="sm" onClick={() => handleConfirmBooking(booking.id)}>
+                          Confirm
+                        </Button>
                       )}
                       {booking.status === "Confirmed" && (
-                        <Button variant="destructive" size="sm">Cancel</Button>
+                        <>
+                          <Button size="sm" onClick={() => handleCompleteBooking(booking.id)}>
+                            Complete
+                          </Button>
+                          <Button variant="destructive" size="sm" onClick={() => handleCancelBooking(booking.id)}>
+                            Cancel
+                          </Button>
+                        </>
+                      )}
+                      {booking.status === "Completed" && (
+                        <Button size="sm" onClick={handleRateService}>Rate Service</Button>
                       )}
                     </div>
                   </div>
@@ -126,26 +191,164 @@ const BookingDashboard = () => {
             ))}
           </TabsContent>
           
-          <TabsContent value="pending">
+          <TabsContent value="pending" className="space-y-4">
             {bookings.filter(b => b.status === "Pending").map((booking) => (
               <Card key={booking.id} className="hover:shadow-hover transition-shadow">
-                {/* Same card structure as above */}
+                <CardHeader className="pb-4">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <CardTitle className="text-xl">{booking.service}</CardTitle>
+                      <p className="text-muted-foreground">{booking.provider}</p>
+                    </div>
+                    <Badge className={`${getStatusColor(booking.status)} text-white`}>
+                      {booking.status}
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="flex items-center gap-2">
+                      <Calendar className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm">{booking.date}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm">{booking.time}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <MapPin className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm">{booking.location}</span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-4">
+                      <span className="font-semibold text-lg">{booking.price}</span>
+                      <div className="flex items-center gap-1">
+                        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                        <span className="text-sm">{booking.rating}</span>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm" onClick={handleContactProvider}>
+                        <Phone className="h-4 w-4 mr-1" />
+                        Contact
+                      </Button>
+                      <Button size="sm" onClick={() => handleConfirmBooking(booking.id)}>
+                        Confirm
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
               </Card>
             ))}
           </TabsContent>
           
-          <TabsContent value="confirmed">
+          <TabsContent value="confirmed" className="space-y-4">
             {bookings.filter(b => b.status === "Confirmed").map((booking) => (
               <Card key={booking.id} className="hover:shadow-hover transition-shadow">
-                {/* Same card structure as above */}
+                <CardHeader className="pb-4">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <CardTitle className="text-xl">{booking.service}</CardTitle>
+                      <p className="text-muted-foreground">{booking.provider}</p>
+                    </div>
+                    <Badge className={`${getStatusColor(booking.status)} text-white`}>
+                      {booking.status}
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="flex items-center gap-2">
+                      <Calendar className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm">{booking.date}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm">{booking.time}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <MapPin className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm">{booking.location}</span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-4">
+                      <span className="font-semibold text-lg">{booking.price}</span>
+                      <div className="flex items-center gap-1">
+                        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                        <span className="text-sm">{booking.rating}</span>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm" onClick={handleContactProvider}>
+                        <Phone className="h-4 w-4 mr-1" />
+                        Contact
+                      </Button>
+                      <Button size="sm" onClick={() => handleCompleteBooking(booking.id)}>
+                        Complete
+                      </Button>
+                      <Button variant="destructive" size="sm" onClick={() => handleCancelBooking(booking.id)}>
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
               </Card>
             ))}
           </TabsContent>
           
-          <TabsContent value="completed">
+          <TabsContent value="completed" className="space-y-4">
             {bookings.filter(b => b.status === "Completed").map((booking) => (
               <Card key={booking.id} className="hover:shadow-hover transition-shadow">
-                {/* Same card structure as above */}
+                <CardHeader className="pb-4">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <CardTitle className="text-xl">{booking.service}</CardTitle>
+                      <p className="text-muted-foreground">{booking.provider}</p>
+                    </div>
+                    <Badge className={`${getStatusColor(booking.status)} text-white`}>
+                      {booking.status}
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="flex items-center gap-2">
+                      <Calendar className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm">{booking.date}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm">{booking.time}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <MapPin className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm">{booking.location}</span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-4">
+                      <span className="font-semibold text-lg">{booking.price}</span>
+                      <div className="flex items-center gap-1">
+                        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                        <span className="text-sm">{booking.rating}</span>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm" onClick={handleContactProvider}>
+                        <Phone className="h-4 w-4 mr-1" />
+                        Contact
+                      </Button>
+                      <Button size="sm" onClick={handleRateService}>
+                        Rate Service
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
               </Card>
             ))}
           </TabsContent>

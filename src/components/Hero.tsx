@@ -25,14 +25,8 @@ const Hero = () => {
             </div>
             
             <div className="w-full max-w-lg space-y-2">
-              <div className="flex space-x-2">
-                <AreaFilter />
-                <Button className="bg-secondary hover:bg-secondary/90 text-white shadow-soft">
-                  <Search className="h-4 w-4" />
-                </Button>
-              </div>
               <p className="text-xs text-white/70">
-                Find services available in your area
+                Discover professional home services in your area
               </p>
             </div>
 
@@ -40,9 +34,9 @@ const Hero = () => {
               <Button 
                 size="lg" 
                 className="bg-white text-primary hover:bg-white/90 shadow-hover"
-                onClick={() => navigate('/bookings')}
+                onClick={() => navigate('/services')}
               >
-                Book Service Now
+                Browse Services
               </Button>
               <Button 
                 size="lg" 

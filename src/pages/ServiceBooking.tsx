@@ -68,8 +68,9 @@ const ServiceBooking = () => {
       return;
     }
 
+    // Show success popup
     toast({
-      title: "Booking Confirmed!",
+      title: "Order Confirmed Successfully! 🎉",
       description: `Your service is booked for ${format(selectedDate, 'PPP')} at ${selectedTime}`,
     });
 

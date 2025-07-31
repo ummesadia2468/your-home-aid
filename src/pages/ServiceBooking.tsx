@@ -28,7 +28,7 @@ const ServiceBooking = () => {
     notes: ""
   });
 
-  // Sample service data - matches ServiceCategory data
+  // Sample service data
   const serviceData: Record<string, any> = {
     "1": {
       id: 1,
@@ -41,50 +41,10 @@ const ServiceBooking = () => {
       duration: "2-3 hours",
       description: "Complete house cleaning including dusting, mopping, and bathroom cleaning",
       features: ["Dusting all surfaces", "Mopping floors", "Bathroom cleaning", "Kitchen cleaning", "Vacuum cleaning"]
-    },
-    "2": {
-      id: 2,
-      name: "Deep Cleaning Service",
-      provider: "Sparkle Clean",
-      price: "PKR 4,500",
-      originalPrice: "PKR 5,000",
-      rating: 4.9,
-      reviews: 89,
-      duration: "4-5 hours",
-      description: "Comprehensive deep cleaning with kitchen appliances and carpet cleaning",
-      features: ["Deep carpet cleaning", "Kitchen appliance cleaning", "Bathroom deep scrub", "Window cleaning", "Furniture polishing"]
-    },
-    "3": {
-      id: 3,
-      name: "Office Cleaning",
-      provider: "Commercial Clean Co.",
-      price: "PKR 3,000",
-      originalPrice: "",
-      rating: 4.7,
-      reviews: 67,
-      duration: "3-4 hours",
-      description: "Professional office cleaning including workstations and meeting rooms",
-      features: ["Workstation cleaning", "Meeting room setup", "Floor cleaning", "Trash removal", "Restroom maintenance"]
     }
   };
 
   const service = serviceData[serviceId || "1"];
-
-  // Handle case when service is not found
-  if (!service) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Header />
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold mb-4">Service Not Found</h1>
-            <p className="text-muted-foreground mb-4">The requested service could not be found.</p>
-            <Button onClick={() => navigate(-1)}>Go Back</Button>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   const timeSlots = [
     "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM",

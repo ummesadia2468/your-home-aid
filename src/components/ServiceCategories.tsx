@@ -14,11 +14,7 @@ import {
   Hammer
 } from "lucide-react";
 
-interface ServiceCategoriesProps {
-  selectedArea?: string;
-}
-
-const ServiceCategories = ({ selectedArea }: ServiceCategoriesProps) => {
+const ServiceCategories = () => {
   const navigate = useNavigate();
   
   const categories = [
@@ -108,11 +104,6 @@ const ServiceCategories = ({ selectedArea }: ServiceCategoriesProps) => {
             </h2>
             <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
               Choose from our wide range of professional services. All providers are verified and rated by customers.
-              {selectedArea && (
-                <span className="block mt-2 text-primary font-medium">
-                  Available in {selectedArea}
-                </span>
-              )}
             </p>
           </div>
         </div>
